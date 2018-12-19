@@ -1,0 +1,405 @@
+/* Turing machine */
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+typedef struct Cell Cell;
+
+ struct Cell {
+         /* This is a node for the doubly linked list */
+        char contents;
+        struct Cell* next;
+        struct Cell* prev;
+};
+
+typedef struct instructionSet {
+        char writeVal;
+        char moveDir;
+        int newState;
+}instructionSet;
+
+void insertLeft(struct Cell** head, char content){
+        /* Create a cell to put somewhere*/
+       /* struct Cell new = malloc(sizeof(struct Cell)); Disregard me, debugging */
+	   struct Cell* new = malloc(sizeof(struct Cell));
+
+        /* set new information */
+        (*new).contents = content;
+        (*new).next = (*head);
+        (*new).prev = NULL;
+
+        /* if the head already points to something, change the pointer */
+        if(head != NULL){
+                (**head).prev = new;
+        }
+
+        (*head) = new;
+
+}
+
+void insertRight(struct Cell** head, char content) {
+        /* Create a cell to put somewhere */
+        struct Cell* new = malloc(sizeof(struct Cell));
+
+        struct Cell* last = malloc(sizeof(struct Cell));
+		
+        last = (*head);
+		
+        /* set new information */
+        (*new).contents = content;
+        (*new).next = NULL;
+
+		/*printf("Inside IR, new: %c\n", (*new).contents);*/
+		
+        /* If nothing else exists, create from scratch */
+        if((*head) == NULL){
+		/*	printf("Head was null!\n");*/
+                (*new).prev = NULL;
+				
+				/* Trying to fix setting head to new */
+				(*head) = new;
+				
+				/*(**head).contents = new.contents
+				(**head).next = new.next; */
+				
+				/*printf("New.contents: %c\n", (*new).contents);
+				printf("Head.contents: %c\n", (**head).contents);*/
+                
+                return;
+        }
+
+        /* If stuff already exists, go to the end of that stuff */
+        while((*last).next != NULL){
+				/*printf("Last contents: %c\n", (*last).contents);*/
+                last = (*last).next;
+        }
+
+        /* Fix up the last cell */
+        (*last).next = new;
+        (*new).prev = last;
+
+        return;
+
+}
+
+int main() {
+/* Main project: Implement a turning machine.
+        1. An infinite tape, divided into cells ((doubly linked list))
+        2. A read/write head, which is capable of reading the current cell, writing new values into the current cell and moving R/L
+        3. A state register
+        4. A finite table of instructions which, given the current state of the machine, and the currently being read tape cell. tells the machine to ((2D array)):
+                - Write some item into the cell (possibly the same)
+                - Move the head left or right
+                - Change to some state (possibly the same)
+
+        Note: Input file specification:
+                Line 1: Initial tape content
+                Line 2: Number of states
+                Line 3: Start state
+                Line 4: End state
+                All other lines: State, ReadVal, WriteVal, MoveDirection, NewState */
+
+        /* Step 1: Read input file */
+        char input[15];
+        char initialTape[32] = "";
+        int stateNum = 0;
+        int startState;
+        int endState;
+
+        printf("What's the name of your input file? \n");
+        scanf(" %s", input);
+
+        FILE *inputFile = fopen(input, "r");
+                size_t j;
+
+                char *line[32];
+
+                for(j = 0; j < 32; j++) {
+                        line[j] = malloc(sizeof(int) * 32);
+
+
+                        if( line[j] ==NULL ){
+                                printf("Malloc error 2");
+                                exit(1);
+                        }
+                }
+
+                /* Populate variables from input file */
+
+        if (inputFile == NULL) {
+                printf("Did not find the file, try again\n");
+                exit(1);
+        } else {
+                        int i = 0;
+                        while(fgets(line[i], 32, inputFile) != NULL) {
+
+                        i++;
+                        }
+
+                       /* Debugging input code
+                                            printf("Line 1: %s", line[0]);
+                        printf("Line 2: %s", line[1]);
+                        printf("Line 3: %s", line[2]);
+
+                        printf("Line 4: %s", line[3]); */
+                }
+                fclose(inputFile);
+
+                /* Populating */
+
+                                /* Line 1: Initial Tape Contents */
+                                                                strcpy(initialTape, line[0]);
+                                                                printf("Initial Tape: %s", initialTape);
+
+                                /* Line 2: Number of states */
+                                                                stateNum = atoi(line[1]);
+                                                                printf("Number of states: %d\n", stateNum);
+
+                                /* Line 3: Start state */
+                                startState = atoi(line[2]);
+                                printf("Start state: %d\n", startState);
+
+                                /* Line 4: End state */
+                                endState = atoi(line[3]);
+                                printf("End state: %d\n", endState);
+
+                                /* All other lines SEE CREATING INSTRUCTION TABLE*/
+                                /* State, ReadVal, WriteVal, MoveDirection, NewState*/
+
+                                /* Run through each array spot (input line) */
+
+       /* Set up the memory allocation for the 2d array of structs */
+                struct instructionSet **instructionTable = (instructionSet**) malloc(stateNum * sizeof(struct instructionSet*));
+
+       /* contains ASCII char "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789" */
+
+           /*printf("I have made the instructionTable\n");*/
+       int i;
+       for(i=0; i< stateNum; i++){
+                instructionTable[i] = (instructionSet*)malloc(127 * sizeof(struct instructionSet));
+       }
+
+           /*printf("I have malloc the instructionTable\n");*/
+       if(instructionTable == NULL){
+            printf("Malloc has failed and that's your whole problem.");
+                        }
+        
+       /* Populate the table with states and ASCI values */
+           /* State, ReadVal, WriteVal, MoveDirection, NewState */
+           /* char readVal;
+                char writeVal;
+                char moveDir;
+                int newState;*/
+                char *tok;
+                char *state, *newState;
+                char *readVal, *writeVal, *moveDir;
+
+                /* Populate empty table */
+                /* still cant figure that one out #loveC */
+
+                /* Insert values based on text file */
+
+                /* Cycle through lines of text */
+                int counter = 1;
+
+                                /*printf("I am about to get into the meat and for loop of this code");*/
+           for(j=4; j<32; j++){
+                                        /* make sure the array spot isn't empty */
+                                        if(line[j]) {
+                                                /* get the first token from the line */
+                                                tok = strtok(line[j], " ");
+                                                                                                /*printf(tok);*/
+                                                state = tok;
+                                                /*printf("state: %s \n", state);*/
+
+                                                while( tok != NULL){
+                                                                                                        /*printf("Tok %d \n", counter);*/
+                                                        tok = strtok(NULL, " ");
+                                                        if(counter == 1){
+                                                                /* 2nd spot */
+                                                                readVal = tok;
+                                                                /*printf("ReadVal: %s \n", readVal);*/
+                                                                                                                                counter ++;
+                                                        } else if(counter == 2){
+                                                                /* 3rd spot */
+                                                                writeVal = tok;
+                                                               /* printf("WriteVal: %s \n", writeVal);*/
+                                                                                                                                counter ++;
+                                                        } else if (counter == 3) {
+                                                                /* 4th spot */
+                                                                moveDir = tok;
+                                                                /*printf("moveDir: %s \n", moveDir);*/
+                                                                                                                                counter ++;
+                                                        } else if (counter == 4) {
+                                                                /* 5th spot */
+                                                                newState = tok;
+                                                                /*printf("newState: %s \n", newState);*/
+
+                                                                                                                                /* jump hack */
+                                                                                                                                counter = 75;
+                                                        } else if (counter == 75) {
+
+                                                                /* assemble instruction table */
+                                                                                                                        /*printf("State: %c \n", (*state));
+                                                                                                                        printf("Readval: %c \n", (*readVal));
+                                                                                                                        printf("Writeval: %c \n", (*writeVal));*/
+                                                                                                                        
+															
+                                                           instructionTable[atoi(state)][(*readVal)].writeVal = (*writeVal);
+                                                            instructionTable[atoi(state)][(*readVal)].moveDir = (*moveDir);
+                                                            instructionTable[atoi(state)][(*readVal)].newState = atoi(newState);
+
+																														/*printf("State: %d\n", atoi(state));
+																														printf("Readval: %d\n", atoi(readVal));
+																														
+                                                                                                                        printf("WriteVal: %c \n", instructionTable[atoi(state)][(*readVal)].writeVal);
+                                                                                                                        printf("MoveDir: %c \n", instructionTable[atoi(state)][(*readVal)].moveDir);
+                                                                                                                        printf("NewState: %d \n", instructionTable[atoi(state)][(*readVal)].newState);*/
+                                                                                                                        counter = 1;
+                                                        }
+
+
+                                                }
+
+                                        }
+                                }
+
+                 /* Debugging note: 2D array and user input works */
+		
+                /* head for linked list */
+              struct Cell* head = malloc(sizeof(struct Cell));
+              struct Cell* curr = malloc(sizeof(struct Cell));
+
+			  head = NULL;
+              curr = NULL;
+              
+
+                /* Create linked initial tape */
+                int z = 0;
+				
+               while(initialTape && initialTape[z] != '\n' && initialTape[z] != ' ' && initialTape[z] != '\0' && initialTape[z] != '\t' && initialTape[z] != '\r' && initialTape[z] != '\v' && initialTape[z] != '\f'){
+						/* Now feeds properly printf("Initial Tape Z: %c\n", initialTape[z]); */
+						insertRight(&head, initialTape[z]);
+						/*printf("Head contents: %c\n", (*head).contents);*/
+						z++;
+                        }
+                
+
+                curr = head;
+                int curState = startState;
+                char curVal = initialTape[0];
+                int count = 0;
+                int skip = 0;
+			
+               /* printf("CurVAL: %d\n", curVal);*/
+
+                /* allow to loop through tape */
+                while(curState != endState) {
+					skip = 0;
+					
+				/*	printf("Start state: %d\n", curState);
+					printf("Read value: %c\n", curVal); */
+					
+					/*	printf("CurState: %d\n", curState);
+						printf("CurVal: %c\n", curVal);*/
+						
+					/*	printf("Table move: %c\n ", instructionTable[curState][curVal].moveDir);
+						printf("Table state: %d\n ", instructionTable[curState][curVal].newState);*/
+						
+						
+                            /* WRITE */
+                            (*curr).contents = instructionTable[curState][curVal].writeVal;
+                            printf("Write: %c\n", (*curr).contents);
+                            
+                           /* printf("Write value: %c\n", (*curr).contents); */
+						    /*printf("Write val: %c\n", instructionTable[curState][curVal].writeVal);*/
+						    /*printf("Contents: %c\n", (*curr).contents);*/
+						
+						
+                        /* MOVE */
+                        if(instructionTable[curState][curVal].moveDir  == 'L'){
+                            printf("Move left\n");
+							/*	printf("Moving left\n");*/
+						/*	printf("Move direction: Left\n");*/
+                                if((*curr).prev != NULL) {
+                                    
+                                        curr = (*curr).prev;
+                                        
+                                        if((*curr).prev == NULL){
+                                            printf("Move left and make a new one\n");
+                                          /*  printf("creating more left cells\n");*/
+                                            //printf("Old val %c", currVal);
+                                            //curVal = 'B';
+                                            //(*curr).contents = curVal; 
+                                            
+                                            //insertLeft(&head, (*curr).contents);
+                                            insertLeft(&head, 'B');
+                                            /*printf("New State: %d", curState);*/
+                                            //skip = 1;
+                                        }
+                                } 
+                        } else if(instructionTable[curState][curVal].moveDir == 'R'){
+                            printf("Moving right\n");
+							/*	printf("Moving right\n");*/
+						/*	printf("Move direction: Right\n");*/
+                                if((*curr).next != NULL) {
+                                   
+                                  /*  printf("actually moving right\n");*/
+                                    curr = (*curr).next;
+                                    
+                                    if((*curr).next == NULL){
+                                         printf("Moving right and make a new one\n");
+                                       /* printf("creating more right cells\n");*/
+                                        /* see a blank */
+                                        
+                                        //curVal = 'B';
+                                        //(*curr).contents = curVal; 
+                                        
+                                        /* write a blank */
+                                       /* printf("Writing V: %c\n", 'B');*/
+                                        insertRight(&head,'B');
+                                       /* printf("New State: %d", curState);*/
+                                        //skip =  1;
+                                    }
+                                }
+                                
+                        }
+
+                        
+                        
+                        if(skip == 0){
+                             /* NEW STATE */
+                            curState = instructionTable[curState][curVal].newState;
+                            printf("Cur state: %d\n", curState);
+                            
+                            /*printf("New state: %d\n", curState);*/
+                            
+                            if((*curr).next != NULL){
+						
+                            /* READ VALUE */
+                            curVal = (*curr).contents;
+                            printf("curVal: %c\n", curVal);
+						   /* printf("Curval: %c\n", (*curr).contents);*/
+                             }
+                        }
+                        
+						if(count == 50){
+							exit(1);
+						} /*use this in case of infinite loop*/
+						
+						count++;
+                }
+
+                /* Print everything */
+                printf("Writing Tape ...\n ");
+
+
+                while(head != NULL){
+                        printf("%c ", (*head).contents);
+                        head = (*head).next;
+                }
+
+
+return 0;
+}
