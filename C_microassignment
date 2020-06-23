@@ -1,3 +1,12 @@
+/* 
+Reads input from user and based on input creates and populates 2D array of structs.
+Rows are shelves [] and columns are locations on shelves [][]
+Struct represents item w/ name and quantity
+Users can enter and retrieve items (prints to screen)
+*/
+
+
+
 /* Reads in user input to create 2D struct array of item objects. Can then be retrieved and printed */
 
 #include <stdlib.h>
