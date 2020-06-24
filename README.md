@@ -8,25 +8,25 @@ How to Run:
     
 2. Depending on the language import into your favorite editor. Individual notes for command line below.
 
-    a. C projects:
+    C projects:
     
         make cproject.c
         
         ./a.out
         
-    b. Clojure projects:
+    Clojure projects:
     
         lein clojureproject.clj
         
         java -jar /user/mypath/clojureproject.jar
         
-    c. Scala projects:
+    Scala projects:
     
         run sbt
         
         type ~run 
         
-    d. Prolog projects:
+    Prolog projects:
     
         swipl -s program.pl
         
