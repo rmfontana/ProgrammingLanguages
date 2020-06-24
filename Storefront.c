@@ -43,10 +43,6 @@ int main() {
 
                 maxsize = shelves * locations;
 
-                /*memset doesn't work probably never will */
-                 /* Set the memory location to 0 of all those items in the area
-                memset(storefront, 0, sizeof(storefront[0][0]) * shelves * locations); */
-
                 /* Allow user input */
                 while(1) {
                         char input[15];
