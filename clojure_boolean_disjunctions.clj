@@ -10,10 +10,4 @@
     false
     (if (=(count newl2) 1)
     (last newl2)
-    newl
-    )
-    )
-  )
-)
-)
-)
+    newl))))))
