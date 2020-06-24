@@ -47,9 +47,7 @@
     (some seq? l) (simplify2(simplify3 l)) ;;if there's still more, still do more
     (= 'or const) (simplify-or l) ;;the last one doesn't get reached, so take care of that
     (= 'and const) (simplify-and l)
-    (= 'not const) (simplify-not l)
-  ))
-)
+    (= 'not const) (simplify-not l))))
 
 (defn simplify [l] 
 (let [j (simplify2 l)]
@@ -57,9 +55,7 @@
     (true? j) true
     (false? j) false
 
-    :else (last(distinct j))
-    ))
-)
+    :else (last(distinct j)))))
 
 
 (defn bind-values [m l]
