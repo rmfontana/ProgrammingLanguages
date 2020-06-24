@@ -10,25 +10,25 @@ How to Run:
 
     a. C projects:
     
-        i. make cproject.c
+        make cproject.c
         
-        ii. ./a.out
+        ./a.out
         
     b. Clojure projects:
     
-        i. lein clojureproject.clj
+        lein clojureproject.clj
         
-        ii. java -jar /user/mypath/clojureproject.jar
+        java -jar /user/mypath/clojureproject.jar
         
     c. Scala projects:
     
-        i. run sbt
+        run sbt
         
-        ii. type ~run 
+        type ~run 
         
     d. Prolog projects:
     
-        i. swipl -s program.pl
+        swipl -s program.pl
         
 
 
